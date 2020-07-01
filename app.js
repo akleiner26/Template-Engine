@@ -4,6 +4,10 @@ const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
+const util = require('util');
+
+// https://medium.com/@suyashmohan/util-promisify-in-node-js-v8-d07ef4ea8c53
+const writeFile = util.promisify(fs.writeFile);
 
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
@@ -14,99 +18,132 @@ const render = require("./lib/htmlRenderer");
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 var employees = [];
-inquirer
-    .prompt([
-        {
-            type: "input",
-            message: "What is your manager's name?",
-            name: "managerName"
-        },
-        {
-            type: "input",
-            message: "What is your manager's ID?",
-            name: "managerID"
-        },
-        {
-            type: "input",
-            message: "What is your manager's email?",
-            name: "managerEmail"
-        },
-        {
-            type: "input",
-            message: "What is your manager's office number?",
-            name: "managerOffice"
-        }
-     ]) .then (function(answers){
-        var newManager = new Manager(answers.managerName, answers.managerID, answers.managerEmail, answers.managerOffice);
-        employees.push(newManager);
-        moreEmployees();
-    })
+const managerQuestions = [
+    {
+        type: "input",
+        message: "What is your manager's name?",
+        name: "managerName"
+    },
+    {
+        type: "input",
+        message: "What is your manager's ID?",
+        name: "managerID"
+    },
+    {
+        type: "input",
+        message: "What is your manager's email?",
+        name: "managerEmail"
+    },
+    {
+        type: "input",
+        message: "What is your manager's office number?",
+        name: "managerOffice"
+    }
+]
 
-function moreEmployees(){
-    inquirer
-        .prompt([  
-        {
-            type: "checkbox",
-            message: "Which type of team member would you like to add?",
-            name: "newMember",
-            choices: ["Engineer", "Intern", "I don't want to add any more team members"]
-        },
-    ]).then (function(newEmployee){
-            if (newEmployee.choices === "Engineer"){
-                inquirer
-                .prompt(engineerQuestions)
-                moreEmployees();
-            } else if (newEmployee.choices === "Intern"){
-                inquirer
-                .prompt(internQuestions);
-                moreEmployees();
-            } else 
-            render.render(employees);
-            console.log("You're HTML File has been rendered!")
-        })
 
-const engineerQuestions = [{ 
-            type: "input",
-            message: "What is your engineer's name?",
-            name: "engineerName"
-        },
-        {
-            type: "input",
-            message: "What is your engineer's ID?",
-            name: "engineerID"
-        },
-        {
-            type: "input",
-            message: "What is your engineer's email?",
-            name: "engineerEmail"
-        },
-        {
-            type: "input",
-            message: "What is your engineer's GitHub username?",
-            name: "engineerUser"
-        }]
+const engineerQuestions = [{
+    type: "input",
+    message: "What is your engineer's name?",
+    name: "engineerName"
+},
+{
+    type: "input",
+    message: "What is your engineer's ID?",
+    name: "engineerID"
+},
+{
+    type: "input",
+    message: "What is your engineer's email?",
+    name: "engineerEmail"
+},
+{
+    type: "input",
+    message: "What is your engineer's GitHub username?",
+    name: "engineerUser"
+}]
 
 const internQuestions = [{
-            type: "input",
-            message: "What is your intern's name?",
-            name: "internName"
-        },
-        {
-            type: "input",
-            message: "What is your intern's ID?",
-            name: "internID"
-        },
-        {
-            type: "input",
-            message: "What is your intern's email?",
-            name: "internEmail"
-        },
-        {
-            type: "input",
-            message: "What is your intern's school?",
-            name: "internSchool"
-        }]
+    type: "input",
+    message: "What is your intern's name?",
+    name: "internName"
+},
+{
+    type: "input",
+    message: "What is your intern's ID?",
+    name: "internID"
+},
+{
+    type: "input",
+    message: "What is your intern's email?",
+    name: "internEmail"
+},
+{
+    type: "input",
+    message: "What is your intern's school?",
+    name: "internSchool"
+}]
+
+const newEmployeeQuestion = [
+    {
+        type: "checkbox",
+        message: "Which type of team member would you like to add?",
+        name: "role",
+        choices: ["Engineer", "Intern", "I don't want to add any more team members"]
+    },
+]
+
+const init = async () => {
+    const answers = await inquirer.prompt(managerQuestions);
+
+    var newManager = new Manager(answers.managerName, answers.managerID, answers.managerEmail, answers.managerOffice);
+    employees.push(newManager);
+    await moreEmployees();
 }
+
+init();
+
+const write = async () => {
+    try {
+       await writeFile(outputPath, render(employees));
+       console.log("You're HTML File has been rendered!");
+    }catch (err){
+        console.log(err);
+    }
+}
+
+const moreEmployees = async () => {
+    const {role} = await inquirer.prompt(newEmployeeQuestion);
+
+    if (role === "Engineer") {
+       addEngineer();
+    } else if (role === "Intern") {
+        addIntern();
+    } else {
+        write();
+    
+    }
+}
+
+const addEngineer = async() => {
+    const engineerAnswers = await inquirer.prompt(engineerQuestions);
+    var newEngineer = new Engineer(engineerAnswers.engineerName, engineerAnswers.engineerID, engineerAnswers.engineerEmail, engineerAnswer.engineerUser);
+    employees.push(newEngineer);
+    moreEmployees();
+}
+
+const addIntern = async() => {
+    const internAnswers = await inquirer.prompt(internQuestions);
+    var newIntern = new Intern(internAnswer.internName, internAnswers.internID, internAnswers.internEmail, internAnswers.internSchool);
+    employees.push(newIntern);
+    moreEmployees();
+}
+
+// const employeeType = async (newEmployee) => {
+    
+        
+    
+// }
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
@@ -116,6 +153,7 @@ const internQuestions = [{
 // `output` folder. You can use the variable `outputPath` above target this location.
 // Hint: you may need to check if the `output` folder exists and create it if it
 // does not.
+
 
 // HINT: each employee type (manager, engineer, or intern) has slightly different
 // information; write your code to ask different questions via inquirer depending on
