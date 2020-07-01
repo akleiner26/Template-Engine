@@ -37,7 +37,7 @@ const managerQuestions = [
     {
         type: "input",
         message: "What is your manager's office number?",
-        name: "managerOffice"
+        name: "officeNumber"
     }
 ]
 
@@ -60,7 +60,7 @@ const engineerQuestions = [{
 {
     type: "input",
     message: "What is your engineer's GitHub username?",
-    name: "engineerUser"
+    name: "github"
 }]
 
 const internQuestions = [{
@@ -81,7 +81,7 @@ const internQuestions = [{
 {
     type: "input",
     message: "What is your intern's school?",
-    name: "internSchool"
+    name: "school"
 }]
 
 const newEmployeeQuestion = [
@@ -101,7 +101,7 @@ const init = async () => {
     await moreEmployees();
 }
 
-init();
+
 
 const write = async () => {
     try {
@@ -139,7 +139,9 @@ const addIntern = async() => {
     moreEmployees();
 }
 
-// const employeeType = async (newEmployee) => {
+init();
+
+
     
         
     
