@@ -86,7 +86,7 @@ const internQuestions = [{
 
 const newEmployeeQuestion = [
     {
-        type: "checkbox",
+        type: "list",
         message: "Which type of team member would you like to add?",
         name: "role",
         choices: ["Engineer", "Intern", "I don't want to add any more team members"]
@@ -96,7 +96,7 @@ const newEmployeeQuestion = [
 const init = async () => {
     const answers = await inquirer.prompt(managerQuestions);
 
-    var newManager = new Manager(answers.managerName, answers.managerID, answers.managerEmail, answers.managerOffice);
+    var newManager = new Manager(answers.managerName, answers.managerID, answers.managerEmail, answers.officeNumber);
     employees.push(newManager);
     await moreEmployees();
 }
@@ -114,7 +114,7 @@ const write = async () => {
 
 const moreEmployees = async () => {
     const {role} = await inquirer.prompt(newEmployeeQuestion);
-
+    console.log(role);
     if (role === "Engineer") {
        addEngineer();
     } else if (role === "Intern") {
@@ -127,14 +127,14 @@ const moreEmployees = async () => {
 
 const addEngineer = async() => {
     const engineerAnswers = await inquirer.prompt(engineerQuestions);
-    var newEngineer = new Engineer(engineerAnswers.engineerName, engineerAnswers.engineerID, engineerAnswers.engineerEmail, engineerAnswer.engineerUser);
+    var newEngineer = new Engineer(engineerAnswers.engineerName, engineerAnswers.engineerID, engineerAnswers.engineerEmail, engineerAnswers.github);
     employees.push(newEngineer);
-    moreEmployees();
+    await moreEmployees();
 }
 
 const addIntern = async() => {
     const internAnswers = await inquirer.prompt(internQuestions);
-    var newIntern = new Intern(internAnswer.internName, internAnswers.internID, internAnswers.internEmail, internAnswers.internSchool);
+    var newIntern = new Intern(internAnswers.internName, internAnswers.internID, internAnswers.internEmail, internAnswers.school);
     employees.push(newIntern);
     moreEmployees();
 }
