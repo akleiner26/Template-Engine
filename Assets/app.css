@@ -1,0 +1,11 @@
+.header {
+    background-color: #4F9A9C;
+    padding-bottom: 15px;
+    margin-bottom: 40px;
+}
+
+body{
+    background-image: url("./background.jpg");
+    background-size: cover;
+    color: #6D6346;
+}
