@@ -2,10 +2,32 @@
     background-color: #4F9A9C;
     padding-bottom: 15px;
     margin-bottom: 40px;
+    color: white;
 }
 
 body{
     background-image: url("./background.jpg");
     background-size: cover;
     color: #6D6346;
+}
+
+footer {
+    margin-bottom: 0;
+    margin-top: 40px;
+    position: fixed;
+    bottom: 0;
+    width: 1920px;
+    min-height: 60px;
+    background-color: #4F9A9C;
+}
+
+#credit {
+    margin-top: 10px;
+    font-size: small;
+    color: white;
+    margin-left: 20px;
+}
+
+#creditLink{
+    color: #D1C187;
 }
