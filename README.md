@@ -38,6 +38,29 @@ https://github.com/akleiner26
 AndrewJKleiner@gmail.com
 
 ## Screenshots:
+### Pass Test:
+<img src= "./Assets/screenshots/passTest.png" alt="App Passing Test Screenshot">
+
+### First Prompt:
+<img src = "./Assets/screenshots/initialPrompt.png" alt="Users First Prompt Screenshot">
+
+### Validator
+<img src = "./Assets/screenshots/validator.png" alt = "Validator Running Screenshot">
+
+### New Role
+<img src = "./Assets/screenshots/newRole.png" alt = "Adding A New Role Screenshot">
+
+### App Running
+<img src = "./Assets/screenshots/runningApp.png" alt = "Screenshot of the App Running">
+
+### Final Prompt
+<img src = "./Assets/screenshots/finishPrompt.png" alt = "Screenshot of App Finishing">
+
+### Final Html
+<img src="./Assets/screenshots/endHtml.png" alt = "Screenshot of Final Html">
+
+### Final Site Rendered
+<img src="./Assets/screenshots/endSite.png" alt = "Screenshot of Final Site Rendered">
 
 
 
